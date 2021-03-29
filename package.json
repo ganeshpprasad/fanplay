@@ -1,7 +1,8 @@
 {
   "name": "demoproject",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
+  "main": "App.js",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -9,9 +10,11 @@
     "test": "jest",
     "lint": "eslint ."
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "17.0.1",
-    "react-native": "0.64.0",
+    "react-native": "0.64.0"
+  },
+  "dependencies": {
     "react-native-sensors": "^7.2.0"
   },
   "devDependencies": {

@@ -7,7 +7,6 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import type {Node} from 'react';
 
 import {
   NativeEventEmitter,
@@ -24,6 +23,10 @@ import {
 const {DevicesModule} = NativeModules;
 const {PulseRateModule} = NativeModules;
 const {HealthKitModule} = NativeModules;
+
+export const scanForDevices = () => {
+  DevicesModule.scan();
+};
 
 const App = () => {
   const [heartRate, setheartRate] = useState('Press Start HR');
@@ -128,7 +131,7 @@ const App = () => {
 
   const onScan = () => {
     console.log('on scan');
-    DeviceModule.scan();
+    DevicesModule.scan();
   };
 
   // const onPress = () => {
@@ -238,5 +241,3 @@ const style = StyleSheet.create({
 });
 
 export default App;
-
-export {onScan, onCameraPress, onHealthKitPress, startConnect};
