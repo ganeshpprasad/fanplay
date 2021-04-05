@@ -24,87 +24,109 @@ const {DevicesModule} = NativeModules;
 const {PulseRateModule} = NativeModules;
 const {HealthKitModule} = NativeModules;
 
-export const FanplayBandModule = () => {
-  const [heartRate, setheartRate] = useState('Press Start HR');
-  const [distance, setdistance] = useState('NA');
-  const [calorie, setcalorie] = useState('NA');
-  const [steps, setsteps] = useState('NA');
-  const [initDone, setinitDone] = useState(false);
-  const [isConnected, setConnected] = useState(false);
-  let macAddressCalback;
+export class FanplayBandModule extends React.Component {
+  deviceScanListener;
+  deviceHeartRateListener;
+  cameraHeartRateListener;
+  healthKitHeartRateListener;
+  deviceStepCalorieDistanceListener;
 
-  const startScanForDevices = (callback: (macAddress: string) => void) => {
-    DevicesModule.scan();
-    macAddressCalback = callback;
-  };
-
-  useEffect(() => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      heartRate: null,
+      distance: null,
+      // heartRaew: null,
+      // heartRate: null,
+    };
     let deviceModule = new NativeEventEmitter(NativeModules.DevicesModule);
 
     //device scan
-    deviceModule.addListener('devicesScanEvent', deviceScan);
-
-    //device heart rate scan
-    deviceModule.addListener('devicesHeartRateScanEvent', devicesHeartRateScan);
-
-    //camera based heart rate
-    deviceModule.addListener('cameraHeartRateEvent', camHeartRateEvent);
-
-    //health kit
-    deviceModule.addListener(
-      'healthKitHeartRateEvent',
-      healthKitheartRateEvent,
+    this.deviceScanListener = deviceModule.addListener(
+      'devicesScanEvent',
+      this.deviceScan,
     );
 
-    deviceModule.addListener(
+    //device heart rate scan
+    this.deviceHeartRateListener = deviceModule.addListener(
+      'devicesHeartRateScanEvent',
+      this.devicesHeartRateScan,
+    );
+
+    //camera based heart rate
+    this.cameraHeartRateListener = deviceModule.addListener(
+      'cameraHeartRateEvent',
+      this.camHeartRateEvent,
+    );
+
+    //health kit
+    this.healthKitHeartRateListener = deviceModule.addListener(
+      'healthKitHeartRateEvent',
+      this.healthKitheartRateEvent,
+    );
+
+    this.deviceStepCalorieDistanceListener = deviceModule.addListener(
       'deviceStepsCalorieDistanceDiscover',
-      deviceStepsCalorieDistance,
+      this.deviceStepsCalorieDistance,
     );
 
     DevicesModule.init();
     PulseRateModule.init();
     HealthKitModule.init();
-    return () => {};
-  }, []);
+  }
 
-  const devicesHeartRateScan = event => {
+  componentWillUnmount() {
+    this.deviceScanListener.remove();
+    this.cameraHeartRateListener.remove();
+    this.healthKitHeartRateListener.remove();
+    this.deviceStepCalorieDistanceListener.remove();
+  }
+
+  macAddressCalback = callback => {};
+
+  startScanForDevices = (callback: (macAddress: string) => void) => {
+    DevicesModule.scan();
+    this.macAddressCalback = callback;
+  };
+
+  devicesHeartRateScan = event => {
     console.log(event);
     console.log(event.hr);
     console.log(event.step);
     console.log(event.cal);
     console.log(event.dist);
-    setheartRate(event.hr);
-    setsteps(event.step);
-    setcalorie(event.cal);
-    setdistance(event.dist);
+    // setheartRate(event.hr);
+    // setsteps(event.step);
+    // setcalorie(event.cal);
+    // setdistance(event.dist);
   };
 
-  const deviceStepsCalorieDistance = event => {
+  deviceStepsCalorieDistance = event => {
     console.log(event);
   };
 
-  const deviceScan = event => {
+  deviceScan = event => {
     console.log(event.address); // "someValue"
-    if (!macAddressCalback) {
+    if (!this.macAddressCalback) {
       throw 'No callback initilased';
     }
-    macAddressCalback(event.address);
+    this.macAddressCalback(event.address);
   };
 
-  const healthKitheartRateEvent = event => {
+  healthKitheartRateEvent = event => {
     console.log(event);
     console.log(event.heartRate);
     console.log(event.status);
     console.log(event.error);
   };
 
-  const camHeartRateEvent = event => {
+  camHeartRateEvent = event => {
     console.log(event);
     console.log(event.heartRate);
     console.log(event.status);
     console.log(event.error);
   };
-};
+}
 
 const App = () => {
   const [heartRate, setheartRate] = useState('Press Start HR');
