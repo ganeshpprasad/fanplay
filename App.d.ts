@@ -1,3 +1,3 @@
-import {scanForDevices} from './App';
+import App, {FanplayBandModule} from './App';
 
-export {scanForDevices};
+export {FanplayBandModule, App};
