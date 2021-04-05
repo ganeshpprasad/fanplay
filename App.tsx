@@ -82,9 +82,9 @@ export class FanplayBandModule extends React.Component {
     this.deviceStepCalorieDistanceListener.remove();
   }
 
-  macAddressCalback = callback => {};
+  macAddressCalback = macAddress => {};
 
-  startScanForDevices = (callback: (macAddress: string) => void) => {
+  public startScanForDevices = (callback: (macAddress: string) => void) => {
     DevicesModule.scan();
     this.macAddressCalback = callback;
   };
