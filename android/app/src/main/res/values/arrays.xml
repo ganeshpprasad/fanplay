@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ipl_teams">
+        <item>Chennai Super Kings ( CSK)</item>
+        <item>Kerala Blasters Football Club (KBFC)</item>
+        <!-- <item>Royal Challengers Bangalore (RCB)</item>
+        <item>Mumbai Indians (MI)</item>
+        <item>Delhi Capitals (DC)</item>
+        <item>Kings XI Punjab ( KXIP)</item>
+        <item>Kolkata Knight Riders ( KKR)</item>
+        <item>Rajasthan Royals (RR)</item>
+        <item>Sunrisers Hyderabad ( SRH)</item>-->
+    </string-array>
+    <string-array name="sports">
+        <item>Cricket</item>
+        <item>Football</item>
+        <item>Badminton</item>
+        <item>Tennis</item>
+        <item>Swimming</item>
+        <item>Running</item>
+        <item>Cycling</item>
+    </string-array>
+    <string-array name="health_issues">
+        <item>Diabetes</item>
+        <item>Hypertension</item>
+        <item>Heart Problems</item>
+        <item>Breathing (Respiratory)</item>
+    </string-array>
+    <string-array name="habits">
+        <item>Smoke</item>
+        <item>Drink</item>
+    </string-array>
+    <string-array name="physical_activities">
+        <item>Yoga</item>
+        <item>Sports</item>
+        <item>Running</item>
+        <item>Cycling</item>
+        <item>Swimming</item>
+    </string-array>
+    <string-array name="examples">
+        <item># DIL_IRUKKA</item>
+        <item># ENNUMYELLOW</item>
+        <item># UNIFIED_BY_EMOTIONS</item>
+    </string-array>
+</resources>

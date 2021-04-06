@@ -27,6 +27,7 @@ class SponsorAnalyticsHelper: DataHelperProtocol {
         t.column(locationId)
         t.column(noOfClicks)
         t.column(screenTime)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

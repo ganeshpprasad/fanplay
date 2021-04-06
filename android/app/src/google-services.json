@@ -1,0 +1,141 @@
+{
+  "project_info": {
+    "project_number": "187705283249",
+    "firebase_url": "https://fanplay-dev.firebaseio.com",
+    "project_id": "fanplay-dev",
+    "storage_bucket": "fanplay-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187705283249:android:c9e4923533b269f8128890",
+        "android_client_info": {
+          "package_name": "com.demoproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187705283249-g24rq0mn51sbhocuduh07sj00k8qdtdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaBcI8rw7ykGROOGIX8uJtx4dJV2unQdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187705283249-g24rq0mn51sbhocuduh07sj00k8qdtdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187705283249:android:9482126bbed3bd45128890",
+        "android_client_info": {
+          "package_name": "com.fanplayiot.core.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187705283249-4785vv4drnggl1u0bmk84blgdnlv8mv7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "3be71ef2bbaa9dcdd8688be252df3fc007d80583"
+          }
+        },
+        {
+          "client_id": "187705283249-bj54vgiia6m6gb3v9deuc9f8cui16ole.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "e0ccc0df7dcaf36a4d5ae4273b21da22f79dfc74"
+          }
+        },
+        {
+          "client_id": "187705283249-dtr1srk56hocdl8ruodkoak9q4kh23s5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "a39e1dcb4500e2f8da3daa6623e0a8a5823c393d"
+          }
+        },
+        {
+          "client_id": "187705283249-gokmuq728nc3b988tvkajlg9v2vcnpb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "7fb0ffd30daf6556bbbbde822c29e132e6a5ef64"
+          }
+        },
+        {
+          "client_id": "187705283249-i512cotnp9jjlka908vmekbnkvmrvmqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "c6adb2c97bae4fa2f42092f1e0958d16cd5902a9"
+          }
+        },
+        {
+          "client_id": "187705283249-k9au9a8lko8qfe6v14qk1u71pv1me4k6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "d6f5074965a9c727a43e5493bab891dd0ff79c23"
+          }
+        },
+        {
+          "client_id": "187705283249-lsbuamdb2iggjomg7kijliervlfe533p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "50a80ea64f2f099105b8f04832c928cda99ead16"
+          }
+        },
+        {
+          "client_id": "187705283249-son276pdbuce61tv3r53qn3ltkcolu1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "dfe9a5a1ca93c097c8ef9699047446036dd3754f"
+          }
+        },
+        {
+          "client_id": "187705283249-vjes2rmarpcfhkp8ceg551fbdclp2cbi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fanplayiot.core.dev",
+            "certificate_hash": "a2838ffd95ddcf7893a0a963a60dcb612d36c4d3"
+          }
+        },
+        {
+          "client_id": "187705283249-g24rq0mn51sbhocuduh07sj00k8qdtdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaBcI8rw7ykGROOGIX8uJtx4dJV2unQdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187705283249-g24rq0mn51sbhocuduh07sj00k8qdtdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,28 +20,10 @@ RCT_EXTERN_METHOD(stopScan)
 
 //Device Connection
 RCT_EXTERN_METHOD(isConnected:(RCTResponseSenderBlock *) callback)
-RCT_EXTERN_METHOD(connect:(NSString *)deviceid callback: (RCTResponseSenderBlock *))
+RCT_EXTERN_METHOD(connect:(NSString *)deviceid callback:(RCTResponseSenderBlock *)callback)
 RCT_EXTERN_METHOD(disconnect:(RCTResponseSenderBlock *) callback)
 
-//Heart rate
-RCT_EXTERN_METHOD(startHeartRate)
-RCT_EXTERN_METHOD(stopHearRate)
-
-//Steps Rate
-RCT_EXTERN_METHOD(startSteps)
-RCT_EXTERN_METHOD(stopSteps)
-
-//Calorie Rate
-RCT_EXTERN_METHOD(startCalorie)
-RCT_EXTERN_METHOD(stopCalorie)
-
-//Distance Rate
-RCT_EXTERN_METHOD(startDistance)
-RCT_EXTERN_METHOD(stopDistance)
-
-//MARK:- Tap / Vistle / Shake
-RCT_EXTERN_METHOD(tapIncrementByOne)
-RCT_EXTERN_METHOD(vistleIncrementByOne)
-RCT_EXTERN_METHOD(shakeIncrementByOne) 
+//insert band
+RCT_EXTERN_METHOD(insertBand:(NSString *) address type:(NSInteger *)type)
 @end
 

@@ -20,8 +20,14 @@ RCT_EXTERN_METHOD(isHealthAvailable:(RCTResponseSenderBlock *) callback)
 RCT_EXTERN_METHOD(requestAuthorization:(RCTResponseSenderBlock *) callback)
 
 //get the heart beat query 
-RCT_EXTERN_METHOD(getHeartBeat)
+RCT_EXTERN_METHOD(startFanEngageHeart)
 
 //stop the heart beat query
-RCT_EXTERN_METHOD(stopHeartRate)
+RCT_EXTERN_METHOD(stopFanEngageHeart)
+
+//get the step query
+RCT_EXTERN_METHOD(startFanEngageSteps)
+
+//stop the step query 
+RCT_EXTERN_METHOD(stopFanEngageSteps)
 @end

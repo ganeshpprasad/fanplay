@@ -5,8 +5,9 @@
 //  Created by Sysfore on 28/March/2021.
 //
 
-import React
-import HealthKit
+import UIKit
+import AVFoundation
+import React 
 
 @objc(DevicesModule)
 public class DevicesModule: RCTEventEmitter {
@@ -15,14 +16,8 @@ public class DevicesModule: RCTEventEmitter {
   private var devices:[MCBLEDeviceInfo] = []
   private var callback:(RCTResponseSenderBlock)? = nil
   
-  private var heartRateTime: RepeatSubscriberId?
-  private var stepsTime: RepeatSubscriberId?
-  private var calorieTime: RepeatSubscriberId?
-  private var distanceTime: RepeatSubscriberId?
-  
   @objc override init() {
     super.init()
-    MCBLESDK.setAutoSyncDataWhenConnected(true)
     MCBLESDK.setConnectDelegate(self)
   }
   
@@ -39,7 +34,7 @@ public class DevicesModule: RCTEventEmitter {
   }
   
   public override func supportedEvents() -> [String]! {
-    return ["devicesScanEvent", "devicesHeartRateScanEvent", "deviceStepsCalorieDistanceDiscover"]
+    return ["devicesScanEvent"]
   }
 }
 
@@ -86,7 +81,7 @@ extension DevicesModule {
 //MARK:- Establish Connection Class
 extension DevicesModule {
   
-  @objc func isConnected(callback: @escaping (RCTResponseSenderBlock)){
+  @objc func isConnected(_ callback: @escaping (RCTResponseSenderBlock)){
     print("isConnected")
     self.callback!([["flag":isDeviceConnected()]])
   }
@@ -117,92 +112,6 @@ extension DevicesModule {
   }
 }
 
-
-//MARK:- Monitor Hear rate class
-extension DevicesModule {
-  //start heart rate
-  @objc func startHeartRate() {
-    print("startHeartRate")
-    self.addObserver()
-    MCBLESDK.setHeartRateMeasure(true)
-  }
-  
-  //stop heart rate
-  @objc func stopHearRate() {
-    print("stopHearRate")
-    self.removeObserver()
-    MCBLESDK.setHeartRateMeasure(false)
-  }
-  
-  //add observer for heart rate
-  private func addObserver(){
-    NotificationCenter.default.addObserver(self, selector: #selector(heartRateObserver(_:)), name: NSNotification.Name(rawValue: MCBLENotificationDeviceHeartRateMeasureComplete), object: nil)
-  }
-  
-  //add observer for heart rate
-  private func removeObserver(){
-    NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: MCBLENotificationDeviceHeartRateMeasureComplete), object: nil)
-  }
-  
-  //return the heart rate captured
-  @objc func heartRateObserver(_ sender: NSNotification){
-    let data = sender.object as! MCBLEOfflineSyncData
-    print(data)
-    self.sendEvent(withName: "devicesHeartRateScanEvent", body:  [
-      "hr": data.heartRate,
-      "step" : 0,
-      "cal" : 0,
-      "dist":0
-    ])
-  }
-}
-
-
-//MARK:- Steps / Calorie/ Distance
-extension DevicesModule {
-  @objc func startSteps() {
-    print("startSteps")
-    addStepCalorieDistanceObserver()
-    MCBLESDK.readRealTimeValue()
-  }
-  
-  @objc func stopSteps() {
-    print("stopSteps")
-    removeStepCalorieDistanceObserver()
-  }
-  
-  //add observer for heart rate
-  private func addStepCalorieDistanceObserver(){
-    NotificationCenter.default.addObserver(self, selector: #selector(realTimeDataDidUpdate(_:)), name: NSNotification.Name(rawValue: MCBLENotificationDeviceHeartRateMeasureComplete), object: nil)
-  }
-  
-  //add observer for heart rate
-  private func removeStepCalorieDistanceObserver(){
-    NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: MCBLENotificationDeviceHeartRateMeasureComplete), object: nil)
-  }
-  
-  @objc private func realTimeDataDidUpdate(_ sender: NSNotification){
-    var distanceUnit = ""
-    var distanceString = ""
-    var calorieString = ""
-    var stepCount = 0
-    
-    if let data = sender.object as? MCBLEMotionSyncData {
-      stepCount = data.step
-      distanceUnit = MCBLESDK.distanceUnitIsKM() ? "km" : "mi"
-      distanceString = MCBLESDK.distanceString(withStep: UInt(stepCount))
-      calorieString = MCBLESDK.calorieString(withStep: UInt(stepCount))
-    }
-    removeStepCalorieDistanceObserver()
-    self.sendEvent(withName: "deviceStepsCalorieDistanceDiscover", body:  [
-      "hr": 0,
-      "step" : stepCount,
-      "cal" : calorieString,
-      "dist" : distanceString,
-      "distUnit" : distanceUnit
-    ])
-  }
-}
 
 
 //MARK:- Connect Delegate
@@ -249,15 +158,11 @@ extension  DevicesModule : MCBLESDKConnectDelegate {
 //MARK:- Tap / Vistle / Shake
 extension  DevicesModule {
   
-  @objc func tapIncrementByOne() {
-    
-  }
-  
-  @objc func vistleIncrementByOne() {
-    
-  }
-  
-  @objc func shakeIncrementByOne() {
-    
+  @objc func insertBand(_ address: String, type:Int) {
+    var deviceModel = DeviceModel.init()
+    deviceModel.address = address
+    deviceModel.type = type
+    deviceModel.sId = BTUserDefaults.shared.getString(key: .SID)
+    print(try! DeviceHelper.insert(item: deviceModel))
   }
 }

@@ -28,6 +28,7 @@ class HRHelper: DataHelperProtocol {
         t.column(heartrate)
         t.column(lastUpdated)
         t.column(lastSynced)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

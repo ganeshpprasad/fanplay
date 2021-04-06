@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+main() {
+  xcodebuild \
+    -workspace SQLiteMigrationManager.xcworkspace \
+    -scheme "SQLiteMigrationManager iOS" \
+    -sdk iphonesimulator12.2 \
+    -destination "platform=iOS Simulator,name=iPhone X,OS=12.2"\
+    test
+  xcodebuild \
+    -workspace SQLiteMigrationManager.xcworkspace \
+    -scheme "SQLiteMigrationManager macOS" \
+    -sdk macosx10.14 \
+    -destination "arch=x86_64" \
+    test
+  swift build
+}
+main "$@"

@@ -30,6 +30,7 @@ class SleepHelper: DataHelperProtocol {
         t.column(restless)
         t.column(lastUpdated)
         t.column(lastSynced)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

@@ -27,6 +27,7 @@ class SponsorHelper: DataHelperProtocol {
         t.column(imageUrl)
         t.column(clickUrl)
         t.column(locationId)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="@dimen/marginTop"
+    android:background="@drawable/bg_white_rounded"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/snackbar_icon"
+        android:layout_width="@dimen/msg_icon_size"
+        android:layout_height="@dimen/msg_icon_size"
+        android:layout_margin="@dimen/marginTop"
+        android:src="@drawable/band_connect"
+        android:contentDescription="@string/message_icon"
+        app:layout_constraintTop_toTopOf="@id/snackbar_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/snackbar_desc"/>
+
+    <TextView
+        android:id="@+id/snackbar_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@null"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textSize="15sp"
+        android:paddingTop="6dp"
+        android:paddingLeft="6dp"
+        android:layout_marginTop="@dimen/marginTop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/snackbar_icon"
+        app:layout_constraintEnd_toStartOf="@+id/snackbar_close"
+        tools:text="@string/successful_msg" />
+
+    <TextView
+        android:id="@+id/snackbar_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@null"
+        android:padding="6dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/snackbar_message"
+        app:layout_constraintStart_toStartOf="@+id/snackbar_message"
+        app:layout_constraintEnd_toEndOf="@+id/snackbar_message"
+        tools:text="@string/connect_iot" />
+
+
+    <ImageView
+        android:id="@+id/snackbar_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_gray"
+        android:layout_marginTop="@dimen/marginTop"
+        android:layout_marginEnd="@dimen/marginTop"
+        android:paddingEnd="@dimen/marginTop"
+        android:contentDescription="@string/message_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/snackbar_desc"
+        app:layout_constraintVertical_bias="0.5"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

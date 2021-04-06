@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (5.4.1)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -319,17 +318,11 @@ PODS:
     - React-perflogger (= 0.64.0)
   - RNSensors (7.2.0):
     - React-Core
-  - SQLite.swift (0.12.2):
-    - SQLite.swift/standard (= 0.12.2)
-  - SQLite.swift/standard (0.12.2)
-  - SQLiteMigrationManager.swift (0.7.0):
-    - SQLite.swift (~> 0.12.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - Alamofire
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -379,13 +372,10 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNSensors (from `../node_modules/react-native-sensors`)
-  - SQLite.swift
-  - SQLiteMigrationManager.swift
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - boost-for-react-native
     - CocoaAsyncSocket
     - Flipper
@@ -397,8 +387,6 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
-    - SQLite.swift
-    - SQLiteMigrationManager.swift
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -462,7 +450,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -502,11 +489,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   RNSensors: aefce56de71b313fbdeb6d26c024d7fc9258373f
-  SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
-  SQLiteMigrationManager.swift: 2dd6f760d6e53f666176346436c689e55a608f7a
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: d91ed40ad9f8d1cf8c6443e4ef6013bfc0600087
+PODFILE CHECKSUM: 46ad53316603e6f5cd7d68630ec25cd5fcccc304
 
 COCOAPODS: 1.10.1

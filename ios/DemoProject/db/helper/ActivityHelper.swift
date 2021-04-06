@@ -30,6 +30,7 @@ class ActivityHelper: DataHelperProtocol {
         t.column(bpJson)
         t.column(started)
         t.column(ended)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

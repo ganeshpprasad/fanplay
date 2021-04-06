@@ -29,13 +29,15 @@ struct SCDModel: Codable {
 }
 
 struct DeviceModel: Codable {
-  let address: String = ""
-  let type:Int  = 0 // BAND or EMOTE
-  let lastSynced: Double  = 0
+  var address: String = ""
+  var type:Int  = 0 // BAND or EMOTE
+  var sId:String  = ""
+  var lastSynced: Double  = 0
   
   enum CodingKeys: String, CodingKey {
     case address = "address"
     case type = "type"
+    case sId = "sId"
     case lastSynced = "lastSynced"
   }
 }
@@ -66,11 +68,12 @@ struct FanDataModel: Codable {
 }
 
 struct HeartRateModel: Codable {
-  let id: Int = 0
-  let heartRate:Int  = 0
-  let type:Int  = 0 // BAND, GOOGLE FIT, CAMERA
-  let lastUpdated: Double  = 0.0
-  let lastSynced: Double  = 0
+  var id: Int = 0
+  var heartRate:Int  = 0
+  var type:Int  = 0 // BAND, GOOGLE FIT, CAMERA
+  var lastUpdated: Double  = 0.0
+  var lastSynced: Double  = 0
+  var sId:String  = ""
   
   enum CodingKeys: String, CodingKey {
     case id = "id"
@@ -78,6 +81,7 @@ struct HeartRateModel: Codable {
     case type = "type"
     case lastUpdated = "lastUpdated"
     case lastSynced = "lastSynced"
+    case sId = "sId"
   }
 }
 
@@ -98,13 +102,13 @@ struct WaveDataModel: Codable {
 }
 
 struct WhistleDataModel: Codable {
-  let id: Int = 0
-  let whistleCount:Int  = 0
-  let whistleEarned:Int  = 0
-  let whistleRedeemed:Int  = 0
-  let whistleType:Int  = 0
-  let lastUpdated: Double  = 0.0
-  let lastSynced: Double  = 0
+  var id: Int = 0
+  var whistleCount:Int  = 0
+  var whistleEarned:Int  = 0
+  var whistleRedeemed:Int  = 0
+  var whistleType:Int  = 0
+  var lastUpdated: Double  = 0.0
+  var lastSynced: Double  = 0
   
   enum CodingKeys: String, CodingKey {
     case id = "id"
@@ -116,52 +120,7 @@ struct WhistleDataModel: Codable {
     case lastSynced = "lastSynced"
   }
 }
-
-
-struct TeamModel: Codable {
-  let id: Int = 0
-  let teamName:String = ""
-  let teamIdServer:Double = 0
-  let lastUpdated: Double  = 0.0
-  let lastSynced: Double  = 0
-  
-  enum CodingKeys: String, CodingKey {
-    case id = "id"
-    case teamName = "teamName"
-    case teamIdServer = "teamIdServer"
-    case lastUpdated = "lastUpdated"
-    case lastSynced = "lastSynced"
-  }
-}
-
-struct PlayersModel: Codable {
-  let id: Int = 0
-  let teamId:Int = 0
-  let playerId:Int = 0
-  let playerName:String = ""
-  let isPlaying:Bool = false
-  let isPlayerActive:Bool = false
-  let tapCount:Int = 0
-  let waveCount:Int = 0
-  let whistleCount:Int = 0
-  let lastUpdated: Double  = 0.0
-  let lastSynced: Double  = 0
-  
-  enum CodingKeys: String, CodingKey {
-    case id = "id"
-    case teamId = "teamId"
-    case playerId = "playerId"
-    case playerName = "playerName"
-    case isPlaying = "isPlaying"
-    case isPlayerActive = "isPlayerActive"
-    case tapCount = "tapCount"
-    case waveCount = "waveCount"
-    case whistleCount = "whistleCount"
-    case lastUpdated = "lastUpdated"
-    case lastSynced = "lastSynced"
-  }
-}
-
+ 
 struct AdvertiserModel: Codable {
   let id: Int = 0
   let imageUrl:String = ""
@@ -175,60 +134,7 @@ struct AdvertiserModel: Codable {
     case clickUrl = "clickUrl"
   }
 }
-
-struct UserModel: Codable {
-  let id: Int = 0
-  let tokenId:String = ""
-  let sid:String = ""
-  let latitude:String = ""
-  let longitude:String = ""
-  let timeZone:String = ""
-  let age:String = ""
-  let loginType:String = ""
-  let profileName:String = ""
-  let profileImgUrl:String = ""
-  let teamPref: String  = ""
-  let gender: String  = ""
-  let mobile:String = ""
-  let email:String = ""
-  let dob:String = ""
-  let city:String = ""
-  let height:String = ""
-  let heightMeasure:String = ""
-  let weight:String = ""
-  let weightMeasure:String = ""
-  let deviceId: String  = ""
-  let phoneDeviceInfo: String  = ""
-  let lastUpdated: String  = ""
-  let lastSynced: String  = ""
-  
-  enum CodingKeys: String, CodingKey {
-    case id = "id"
-    case tokenId = "tokenId"
-    case sid = "sid"
-    case latitude = "latitude"
-    case longitude = "longitude"
-    case timeZone = "timeZone"
-    case age = "age"
-    case loginType = "loginType"
-    case profileName = "profileName"
-    case profileImgUrl = "profileImgUrl"
-    case teamPref = "teamPref"
-    case gender = "gender"
-    case mobile = "mobile"
-    case email = "email"
-    case dob = "dob"
-    case city = "city"
-    case height = "height"
-    case heightMeasure = "heightMeasure"
-    case weightMeasure = "weightMeasure"
-    case deviceId = "deviceId"
-    case phoneDeviceInfo = "phoneDeviceInfo"
-    case lastUpdated = "lastUpdated"
-    case lastSynced = "lastSynced"
-  }
-}
-
+ 
 struct LeaderBoard: Codable {
   let id: Int = 0
   let rank:String = ""
@@ -392,4 +298,11 @@ struct ConstantsConfigModel: Codable {
     case id = "id"
     case value = "value"
   }
+}
+
+struct PendingFE: Codable {
+  var id: Int = 0
+  var json:String  = ""
+  var createdDate:String  = ""
+  var synced: Bool = false
 }

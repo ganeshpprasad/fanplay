@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-import React
+import React 
+import Alamofire
 
 #if FB_SONARKIT_ENABLED
 import FlipperKit
@@ -27,25 +28,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate , RCTBridgeDelegate {
   
   var window: UIWindow?
   var bridge: RCTBridge!
+  var heartRateTime:Timer?
+  
+  let hostNames = [nil, "google.com", "invalidhost"]
+  let reachabilityManager = NetworkReachabilityManager()
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     #if FB_SONARKIT_ENABLED
     InitializeFlipper(application);
     #endif
     
-    UIApplication.shared.setMinimumBackgroundFetchInterval(30)
+    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+    LocationService.init().requestLocationAuthorization()
     
+    self.setNetworkNotifier()
+  
     //DB Initialization
     do {
-        if let database = DTDatabase() {
-            try database.createTables()
-            try database.migrateIfNeeded()
-            AppConstants.log(database)
-        }else{
-            fatalError("could not setup database")
-        }
+      if let database = DTDatabase() {
+        try database.createTables()
+        try database.migrateIfNeeded()
+        AppConstants.log(database)
+      }else{
+        fatalError("could not setup database")
+      }
     } catch {
-        fatalError("failed to migrate database: \(error)")
+      fatalError("failed to migrate database: \(error)")
     }
     
     //RTC bridge view
@@ -77,8 +85,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , RCTBridgeDelegate {
     #endif
   }
   
+  //MARK:- Controller Methods
   //go to camera pulse view controller
-  func goToPulseViewController(pulseViewDelegate:PulseViewDelegate) {
+  public func goToPulseViewController(pulseViewDelegate:PulseViewDelegate) {
     DispatchQueue.main.async {
       let customViewController = PulseViewController.init(pulseViewDelegate: pulseViewDelegate)
       if let controller = self.window?.rootViewController {
@@ -86,9 +95,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate , RCTBridgeDelegate {
       }else{
         print("not Found contoller rootViewController")
         pulseViewDelegate.onHeartRateReceved(0)
-      } 
+      }
+    }
+  }
+  
+  //start pedo meter
+  public func goToPedoMeterViewController() {
+    DispatchQueue.main.async {
+      PIPKit.show(with: PedoMeterVC())
     }
   }
   
   
+  //MARK:- Rechability
+  public func setNetworkNotifier(){
+    DispatchQueue.main.async {
+      self.reachabilityManager?.startListening(onQueue: DispatchQueue.main, onUpdatePerforming: { (status) in
+        if status == .reachable(.cellular) {
+          self.callPendingFanEngagemnetSyncApi()
+        }else if status == .reachable(.ethernetOrWiFi) {
+          self.callPendingFanEngagemnetSyncApi()
+        }
+      })
+    }
+  }
+ 
+  //MARK:- Api Methods
+  //create a fan engagement api call
+  public func callCreateFanEngageMentApi(heartRateModel:HeartRateModel){
+    HomeRepo().callCreateFanEngageMentApi(heartRateModel:heartRateModel)
+  }
+  
+  //call pending fan engagement
+  public func callPendingFanEngagemnetSyncApi(){
+    HomeRepo().callPendingFanEngagemnetSyncApi()
+  } 
 }

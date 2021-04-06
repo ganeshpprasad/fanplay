@@ -25,7 +25,8 @@ class UsageAnalyticsHelper: DataHelperProtocol {
       try db.run(table.create(ifNotExists: true) {t in
         t.column(id, primaryKey: .autoincrement)
         t.column(typeStr)
-        t.column(value) 
+        t.column(value)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

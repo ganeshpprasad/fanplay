@@ -29,6 +29,7 @@ class BPHelper: DataHelperProtocol {
         t.column(diastolic)
         t.column(lastUpdated)
         t.column(lastSynced)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

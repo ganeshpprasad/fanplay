@@ -11,6 +11,13 @@ import HealthKit
 
 @objc(HealthKitModule)
 class HealthKitModule: RCTEventEmitter {
+  var heartObserverQuery: HKObserverQuery?
+  var stepObserverQuery: HKObserverQuery?
+  
+  private var heartRateTime: Timer?
+  private var stepsRateTime: Timer?
+  
+  private var timer: Timer?
   
   private let bpmType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)
   
@@ -54,18 +61,50 @@ extension HealthKitModule {
     var er = ""
     if status {
       hr = heartRate
-      st = true
+      st = false
       er = "Success"
     }else{
       hr = 0
-      st = false
+      st = true
       if let err = error {
         er = err.localizedDescription
       }else{
         er = "Failed to fetch heart rate"
       }
     }
+    if hr > 0 {
+      var rate = HeartRateModel.init()
+      rate.heartRate = Int(hr)
+      rate.type = 4
+      rate.sId = BTUserDefaults.shared.getString(key: .SID)
+      print(try! HeartRateHelper.insert(item: rate))
+      HomeRepo().callCreateFanEngageMentApi(heartRateModel: rate)
+//      if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//        //Calling Api Create Heart Rate
+//        appDelegate.callCreateFanEngageMentApi(heartRateModel: rate)
+//      }
+    }
     self.sendCustomEvent(body: [ "heartRate": hr, "status": st, "error": er ])
+  }
+  
+  private func onStepsChanged(_ steps:Int, status: Bool, error:Error?) {
+    var step = 0  
+    var st = false
+    var er = ""
+    if status {
+      step = steps
+      st = false
+      er = "Success"
+    }else{
+      step = 0
+      st = true
+      if let err = error {
+        er = err.localizedDescription
+      }else{
+        er = "Failed to fetch steps rate"
+      }
+    }
+    self.sendCustomEvent(body: [ "stepsRate": step, "status": st, "error": er ])
   }
 }
 
@@ -92,7 +131,7 @@ extension HealthKitModule {
       HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!,
       HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)!
     ]
-    healthStore.requestAuthorization(toShare: bpmTypes, read: [],completion: { (success, error) -> Void in
+    healthStore.requestAuthorization(toShare: bpmTypes, read: bpmTypes,completion: { (success, error) -> Void in
       if success {
         callback([["status": success], ["error": "Success"]])
       }else{
@@ -104,83 +143,184 @@ extension HealthKitModule {
       }
     })
   }
+  
+  @objc private func saveMockHeartData() {
+    // 1. Create a heart rate BPM Sample
+    let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+    let heartRateQuantity = HKQuantity(unit: HKUnit(from: "count/min"),doubleValue: Double(arc4random_uniform(80) + 100))
+    let heartSample = HKQuantitySample(type: heartRateType,quantity: heartRateQuantity, start: Date() , end: Date())
+    
+    // 2. Save the sample in the store
+    healthStore.save(heartSample, withCompletion: { (success, error) -> Void in
+      if let error = error {
+        print("Error saving heart sample: \(error.localizedDescription)")
+      }else{
+        print("Saved heart beat to health kit")
+      }
+    })
+  }
+  
+  private func startMockHeartData() {
+    DispatchQueue.main.async {
+      self.timer = Timer.scheduledTimer(timeInterval: 30.0,
+                                        target: self,
+                                        selector: #selector(self.saveMockHeartData),
+                                        userInfo: nil,
+                                        repeats: true)
+    }
+  }
+  
+  private func stopMockHeartData() {
+    self.timer?.invalidate()
+  }
 }
 
 // MARK:- Start Heart rate
 extension HealthKitModule { 
-  @objc public func getHeartBeat(){
-    print("getHeartBeat")
-    getTodaysHeartRates()
-  }
-  
-  @objc public func stopHeartRate(){
-    
-  }
-  
-  /*Method to get todays heart rate - this only reads data from health kit. */
-  private func getTodaysHeartRates() {
-    print("getTodaysHeartRates")
-    //predicate
-    //    let calendar = NSCalendar.current
-    //    let now = NSDate()
-    //    let components = calendar.dateComponents([.year, .month, .day], from: now as Date)
-    //
-    //    guard let startDate:NSDate = calendar.date(from: components) as NSDate? else { return }
-    //
-    //    var dayComponent    = DateComponents()
-    //    dayComponent.day    = 1
-    //    let endDate:NSDate? = calendar.date(byAdding: dayComponent, to: startDate as Date) as NSDate?
-    
-    //    let predicate = HKQuery.predicateForSamples(withStart: startDate as Date, end: endDate as Date?, options: [])
-    let predicate = HKQuery.predicateForSamples(withStart: Date.distantPast,end: Date(), options: [])
-    
-    //descriptor
-    let sortDescriptors = [ NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)]
-    let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
-    
-    let heartRateQuery = HKSampleQuery(sampleType: heartRateType, predicate: predicate, limit: 10, sortDescriptors: sortDescriptors, resultsHandler: { (query, results, error) in
-      if let err = error {
-        print("Error requesting for access \(err.localizedDescription)")
-        self.onHeartRateChanged(0, status: false, error: err)
-      }else{
-        self.printHeartRateInfo(results: results)
+  @objc public func startFanEngageHeart(){
+    print("getHeartBeat Initally ")
+    self.startMockHeartData()
+    self.observerHeartRateSample()
+    DispatchQueue.main.async {
+      self.heartRateTime = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { (Timer) in
+        self.observerHeartRateSample()
       }
-    }) //eo-query
-    healthStore.execute(heartRateQuery)
-  }//eom
+    } 
+  }
   
-  /*used only for testing, prints heart rate info */
-  private func printHeartRateInfo(results:[HKSample]?){
-    print("printHeartRateInfo")
-    if let results = results, results.count > 0 {
-      print(results)
-      var hearRate:[Double] = []
-      for (_, sample) in results.enumerated() {
-        if let currData:HKQuantitySample = sample as? HKQuantitySample{
-          hearRate.append(currData.quantity.doubleValue(for: HKUnit(from: "count/min")))
-          print("[\(sample)]")
-          print("Heart Rate: \(currData.quantity.doubleValue(for: HKUnit(from: "count/min")))")
-          print("quantityType: \(currData.quantityType)")
-          print("Start Date: \(currData.startDate)")
-          print("End Date: \(currData.endDate)")
-          print("Metadata: \(String(describing: currData.metadata))")
-          print("UUID: \(currData.uuid)")
-          print("Source: \(currData.sourceRevision)")
-          print("Device: \(String(describing: currData.device))")
-          print("---------------------------------\n")
+  @objc public func stopFanEngageHeart(){
+    if self.heartRateTime != nil {
+      self.heartObserverQuery = nil
+      self.heartRateTime?.invalidate()
+      self.heartRateTime = nil
+    }
+  }
+  
+  private func observerHeartRateSample(){
+    if let hearRateSampleType = HKObjectType.quantityType(forIdentifier: .heartRate) {
+      if let heartObserverQuery = self.heartObserverQuery {
+        healthStore.stop(heartObserverQuery)
+      }
+      self.heartObserverQuery = HKObserverQuery(sampleType: hearRateSampleType, predicate: nil, updateHandler: { (_, _, error) in
+        if let err = error {
+          print(err)
+          self.onHeartRateChanged(0, status: false, error: err)
+          return
         }else{
-          print("---------------------------------\n")
+          self.fetchLatestHeartSample { (sample) in
+            print(sample ?? "No Sample Heart rate not found " )
+            if let sample = sample  {
+              let heartRate = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
+              self.onHeartRateChanged(heartRate, status: true, error: nil)
+            }else{
+              print("Else heart rate not found")
+              self.onHeartRateChanged(0, status: false, error: nil)
+            }
+          }
+        }
+      })
+      
+      if let heartObserverQuery = self.heartObserverQuery {
+        healthStore.execute(heartObserverQuery)
+      }
+    }
+  }
+  
+  private func fetchLatestHeartSample(completionHandler: @escaping (_ sample: HKQuantitySample?)->Void ){
+    if let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) {
+      let datePredicate = HKQuery.predicateForSamples(withStart: Date.distantPast, end: Date(), options: .strictEndDate)
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+      let query = HKSampleQuery(sampleType: sampleType, predicate: datePredicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) { (_, results, error) in
+        if let error = error {
+          print("Error: \(error.localizedDescription)")
+          return
+        }
+        if let result = results?.first as? HKQuantitySample{
+          completionHandler(result)
+        }else{
+          completionHandler(nil)
         }
       }
-      self.onHeartRateChanged(hearRate.average, status: true, error: nil)
+      healthStore.execute(query)
     }else{
-      self.onHeartRateChanged(0, status: false, error: nil)
+      completionHandler(nil)
     }
-  }//eom
+  }
 }
 
 // MARK:- Start Steps rate
 extension HealthKitModule {
+  
+  @objc public func startFanEngageSteps(){
+    print("steps Initally ")
+    self.observerStepsRateSample()
+    DispatchQueue.main.async {
+      self.stepsRateTime = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { (Timer) in
+        self.observerStepsRateSample()
+      }
+    }
+  }
+  
+  @objc public func stopFanEngageSteps(){
+    if self.stepsRateTime != nil {
+      self.stepObserverQuery = nil
+      self.stepsRateTime?.invalidate()
+      self.stepsRateTime = nil
+    }
+  }
+  
+  private func observerStepsRateSample(){
+    if let stepSampleType = HKObjectType.quantityType(forIdentifier: .stepCount) {
+      if let stepObserverQuery = self.stepObserverQuery {
+        healthStore.stop(stepObserverQuery)
+      }
+      self.stepObserverQuery = HKObserverQuery(sampleType: stepSampleType, predicate: nil, updateHandler: { (_, _, error) in
+        if let err = error {
+          print(err)
+          self.onStepsChanged(0, status: true, error: err)
+          return
+        }else{
+          self.fetchLatestStepsSample { (sample) in
+            print(sample ?? "No Sample Step rate not found " )
+            if let sample = sample  {
+              let steps = sample.quantity.doubleValue(for: HKUnit.count())
+              self.onStepsChanged(Int(steps), status: false, error: nil)
+            }else{
+              print("Else heart rate not found")
+              self.onStepsChanged(0, status: true, error: nil)
+            }
+          }
+        }
+      })
+      
+      if let stepObserverQuery = self.stepObserverQuery {
+        healthStore.execute(stepObserverQuery)
+      }
+    }
+  }
+  
+  private func fetchLatestStepsSample(completionHandler: @escaping (_ sample: HKQuantitySample?)->Void ){
+    if let sampleType = HKObjectType.quantityType(forIdentifier: .stepCount) {
+      let datePredicate = HKQuery.predicateForSamples(withStart: Date.distantPast, end: Date(), options: .strictEndDate)
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+      let query = HKSampleQuery(sampleType: sampleType, predicate: datePredicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) { (_, results, error) in
+        if let error = error {
+          print("Error: \(error.localizedDescription)")
+          return
+        }
+        if let result = results?.first as? HKQuantitySample{
+          completionHandler(result)
+        }else{
+          completionHandler(nil)
+        }
+      }
+      healthStore.execute(query)
+    }else{
+      completionHandler(nil)
+    }
+  }
+  
+  
   func getTodaysSteps(completion: @escaping (Double) -> Void) {
     let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
     

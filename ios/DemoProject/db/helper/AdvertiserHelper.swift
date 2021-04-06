@@ -28,6 +28,7 @@ class AdvertiserHelper: DataHelperProtocol {
         t.column(clickUrl) 
         t.column(lastUpdated)
         t.column(lastSynced)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

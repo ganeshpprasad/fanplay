@@ -39,6 +39,7 @@ class LeaderHelper: DataHelperProtocol {
         t.column(highestcheeredplayer)
         t.column(lastUpdated)
         t.column(lastSynced)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)

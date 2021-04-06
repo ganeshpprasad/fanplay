@@ -10,6 +10,10 @@ import Foundation
 import SQLite
 
 //MARK:-Common variables
+
+let affiliationid = Expression<Int64>("affiliationid")
+let affiliationname = Expression<String>("affiliationname")
+let affiliationlogo = Expression<String>("affiliationlogo")
 let id = Expression<Int64>("id")
 let deviceType = Expression<Int64>("deviceType")
 let steps = Expression<Int64>("steps")
@@ -19,14 +23,13 @@ let lastUpdated = Expression<Double>("lastUpdated")
 let lastSynced = Expression<Double>("lastSynced")
 
 let address = Expression<String>("address")
-let type = Expression<Double>("type")
+let type = Expression<Int64>("type")
 
 let totalTapCount = Expression<Int64>("totalTapCount")
 let fanMetric = Expression<Double>("fanMetric")
 let totalPoints = Expression<Double>("totalPoints")
 let flag = Expression<Int64>("flag")
 let playerId = Expression<Double>("playerId")
-let teamId = Expression<Double>("teamId")
  
 let heartRate = Expression<Int64>("heartRate")
 
@@ -42,6 +45,7 @@ let teamIdServer = Expression<Double>("teamIdServer")
 
 
 let playerName = Expression<String>("playerName")
+let playerimagepath = Expression<String>("playerimagepath")
 let isPlaying = Expression<Bool>("isPlaying")
 let isPlayerActive = Expression<Bool>("isPlayerActive")
 let tapCount = Expression<Int64>("tapCount")
@@ -109,3 +113,15 @@ let value = Expression<Double>("value")
 
 let idStr = Expression<String>("id")
 let typeStr = Expression<String>("type")
+let sId = Expression<String>("sId")
+
+let teamid = Expression<Int64>("teamid")
+let teamname = Expression<String>("teamname")
+let sportname = Expression<String>("sportname")
+let tournamentname = Expression<String>("tournamentname")
+let teamlogourl = Expression<String>("teamlogourl")
+let teamstoreurl = Expression<String>("teamstoreurl")
+
+
+let json = Expression<String>("json")
+let synced = Expression<Bool>("synced")

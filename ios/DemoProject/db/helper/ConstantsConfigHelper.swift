@@ -25,6 +25,7 @@ class ConstantsConfigHelper: DataHelperProtocol {
       try db.run(table.create(ifNotExists: true) {t in
         t.column(idStr)
         t.column(value)
+        t.column(sId)
       })
     } catch {
       AppConstants.log(error.localizedDescription)
